@@ -343,10 +343,10 @@ export default function HomePage() {
                     />
                     
                     {/* Hover Overlay - Matching Product Card Pattern */}
-                    <div className="absolute inset-0 z-30 flex flex-col justify-end p-8 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none group-hover:pointer-events-auto">
-                      <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out space-y-4">
+                    <div className="absolute inset-0 z-30 flex flex-col justify-end p-8 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus-within:opacity-100 transition-all duration-500 pointer-events-none group-hover:pointer-events-auto group-active:pointer-events-auto group-focus-within:pointer-events-auto">
+                      <div className="transform translate-y-8 group-hover:translate-y-0 group-active:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-500 ease-out space-y-4">
                         
-                        <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+                        <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 group-active:scale-110 group-focus-within:scale-110 transition-transform duration-500">
                           <Icon className="h-6 w-6 text-white" />
                         </div>
 

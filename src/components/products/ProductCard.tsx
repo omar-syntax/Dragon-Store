@@ -39,8 +39,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       )}
 
       {/* Hover Overlay */}
-      <div className="absolute inset-0 z-30 flex flex-col justify-end p-6 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none group-hover:pointer-events-auto">
-        <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out space-y-4">
+      <div className="absolute inset-0 z-30 flex flex-col justify-end p-6 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus-within:opacity-100 transition-all duration-500 pointer-events-none group-hover:pointer-events-auto group-active:pointer-events-auto group-focus-within:pointer-events-auto">
+        <div className="transform translate-y-8 group-hover:translate-y-0 group-active:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-500 ease-out space-y-4">
           
           {/* Action Icons */}
           <div className="flex gap-2">

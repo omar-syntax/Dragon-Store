@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { ShoppingCart, User, Search, Home, Watch, Briefcase, Sparkles, LayoutGrid } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
@@ -17,6 +17,7 @@ import GlobalSearch from './GlobalSearch'
 
 export default function Navbar() {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [isMounted, setIsMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -77,7 +78,9 @@ export default function Navbar() {
           {/* Navigation Items */}
           {navItems.slice(1).map((item) => {
             const Icon = item.icon
-            const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href))
+            const itemCategory = item.href.includes('category=') ? new URLSearchParams(item.href.split('?')[1]).get('category') : null
+            const currentCategory = searchParams.get('category')
+            const isActive = pathname === item.href.split('?')[0] && (itemCategory ? currentCategory === itemCategory : !currentCategory)
             
             return (
               <Tooltip key={item.label}>
@@ -87,7 +90,7 @@ export default function Navbar() {
                       variant="ghost"
                       size="icon"
                       className={`h-10 w-10 rounded-full transition-all duration-300 ${
-                        isActive 
+                        isActive
                           ? 'bg-primary text-primary-foreground shadow-md' 
                           : 'text-white/60 hover:bg-white/10 hover:text-white'
                       }`}
