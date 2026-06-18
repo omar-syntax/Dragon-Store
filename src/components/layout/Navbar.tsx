@@ -167,13 +167,15 @@ export default function Navbar() {
       <header className={`lg:hidden fixed top-4 left-4 right-4 z-[100] transition-all duration-700 ease-in-out ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0 pointer-events-none'}`}>
         <nav className="flex items-center justify-between p-2 pl-4 bg-slate-950/80 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl">
            <Link href="/" className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center shadow-lg overflow-hidden">
               <Image 
                 src="/dragon-logo.svg" 
                 alt="Dragon Logo" 
-                width={36} 
-                height={36}
+                width={28} 
+                height={28}
                 className="object-contain"
               />
+            </div>
             <span className="font-heading font-bold uppercase tracking-[0.2em] text-xs text-white">Dragon</span>
           </Link>
           <div className="flex items-center gap-2">
