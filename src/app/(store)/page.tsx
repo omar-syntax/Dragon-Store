@@ -96,7 +96,15 @@ function RevealSection({
       { threshold: 0.05, rootMargin: '0px 0px -50px 0px' }
     )
     const currentRef = domRef.current
-    if (currentRef) observer.observe(currentRef)
+    if (currentRef) {
+      // Check if already in viewport
+      const rect = currentRef.getBoundingClientRect()
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        setTimeout(() => setIsVisible(true), delay)
+      } else {
+        observer.observe(currentRef)
+      }
+    }
     return () => {
       if (currentRef) observer.unobserve(currentRef)
       observer.disconnect()
@@ -255,7 +263,7 @@ export default function HomePage() {
           )
         })}
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2">
           {SLIDES.map((_, index) => (
             <button
               key={index}
@@ -269,7 +277,10 @@ export default function HomePage() {
       </section>
 
       {/* Main Store Content */}
-      <div className="relative z-20 bg-background shadow-[0_-20px_80px_rgba(0,0,0,0.22)] flex flex-col gap-24 py-24">
+      <div 
+        className="relative z-20 bg-background shadow-[0_-20px_80px_rgba(0,0,0,0.22)] flex flex-col gap-24 py-24"
+        style={{ touchAction: 'pan-y' }}
+      >
 
         {/* Best Sellers Section */}
         <section className="container">
