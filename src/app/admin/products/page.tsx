@@ -312,7 +312,7 @@ export default function ProductManager() {
                   {/* Price, Compare At Price */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Price ($) *</label>
+                      <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Price (EGP) *</label>
                       <input
                         required
                         type="number"
@@ -326,7 +326,7 @@ export default function ProductManager() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Compare At Price ($)</label>
+                      <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Compare At Price (EGP)</label>
                       <input
                         type="number"
                         step="0.01"
