@@ -5,12 +5,18 @@ import { Minus, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CartItem as CartItemType } from '@/types'
 import { formatPrice } from '@/lib/utils'
+import { useCart } from '@/contexts/CartContext'
+import { getDiscountedPrice } from '@/lib/store-engine'
 
 interface CartItemProps {
   item: CartItemType
 }
 
 export default function CartItem({ item }: CartItemProps) {
+  const { updateQty, removeItem } = useCart()
+  const finalPrice = getDiscountedPrice(item.product)
+  const hasDiscount = finalPrice < item.product.price
+
   return (
     <div className="flex items-center gap-4 py-4">
       <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border">
@@ -37,23 +43,44 @@ export default function CartItem({ item }: CartItemProps) {
         <p className="mt-1 text-xs text-muted-foreground uppercase">{item.product.category}</p>
         <div className="mt-2 flex items-center gap-2">
           <div className="flex items-center rounded-md border">
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none border-r">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-none border-r"
+              onClick={() => updateQty(item.product.id, item.quantity - 1)}
+            >
               <Minus className="h-3 w-3" />
             </Button>
             <span className="w-8 text-center text-xs">{item.quantity}</span>
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none border-l">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-none border-l"
+              onClick={() => updateQty(item.product.id, item.quantity + 1)}
+              disabled={item.quantity >= item.product.stock}
+            >
               <Plus className="h-3 w-3" />
             </Button>
           </div>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-destructive"
+            onClick={() => removeItem(item.product.id)}
+          >
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
       <div className="text-right">
-        <p className="text-sm font-bold">{formatPrice(item.product.price * item.quantity)}</p>
-        <p className="text-xs text-muted-foreground">{formatPrice(item.product.price)} each</p>
+        <p className="text-sm font-bold">{formatPrice(finalPrice * item.quantity)}</p>
+        <div className="flex flex-col items-end">
+          <span className="text-xs text-muted-foreground">{formatPrice(finalPrice)} each</span>
+          {hasDiscount && (
+            <span className="text-[10px] text-destructive line-through">{formatPrice(item.product.price)} each</span>
+          )}
+        </div>
       </div>
     </div>
   )

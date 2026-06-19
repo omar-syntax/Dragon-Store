@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { MOCK_PRODUCTS } from '@/lib/mock-data'
+import { getProducts } from '@/lib/store-engine'
 import { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
 
@@ -26,7 +26,8 @@ export default function GlobalSearch({ open, onOpenChange }: SearchProps) {
 
   React.useEffect(() => {
     if (query.length > 1) {
-      const filtered = MOCK_PRODUCTS.filter(product =>
+      const allProducts = getProducts()
+      const filtered = allProducts.filter(product =>
         product.name.toLowerCase().includes(query.toLowerCase()) ||
         product.category.toLowerCase().includes(query.toLowerCase())
       )
@@ -74,12 +75,16 @@ export default function GlobalSearch({ open, onOpenChange }: SearchProps) {
                     className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors group"
                   >
                     <div className="relative h-14 w-14 rounded-lg overflow-hidden bg-muted flex-shrink-0 border border-white/5">
-                      <Image
-                        src={product.images[0]}
-                        alt={product.name}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                      {product.images[0] ? (
+                        <Image
+                          src={product.images[0]}
+                          alt={product.name}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-slate-900 flex items-center justify-center text-[10px] text-white/40">No Img</div>
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-bold text-white uppercase tracking-wide truncate">

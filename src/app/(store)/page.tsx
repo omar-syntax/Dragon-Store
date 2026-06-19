@@ -6,7 +6,8 @@ import Image from 'next/image'
 import { ArrowRight, ShieldCheck, Truck, Watch, Briefcase, Sparkles, ShoppingBag, Star, Quote } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import ProductCard from '@/components/products/ProductCard'
-import { MOCK_PRODUCTS } from '@/lib/mock-data'
+import { getProducts, getCategories } from '@/lib/store-engine'
+import type { Product, Category } from '@/types'
 
 const SLIDES = [
   {
@@ -156,8 +157,41 @@ export default function HomePage() {
     e.currentTarget.releasePointerCapture(e.pointerId)
   }
 
-  const bestSellers = MOCK_PRODUCTS.slice(0, 4)
-  const newArrivals = MOCK_PRODUCTS.slice(4, 6).concat(MOCK_PRODUCTS.slice(0, 2))
+  const [bestSellers, setBestSellers] = useState<Product[]>([])
+  const [newArrivals, setNewArrivals] = useState<Product[]>([])
+  const [categoriesList, setCategoriesList] = useState<any[]>([])
+
+  useEffect(() => {
+    const products = getProducts()
+    const cats = getCategories()
+
+    // Best sellers: featured products, or first 4 products
+    const featured = products.filter((p) => p.is_featured)
+    setBestSellers(featured.length > 0 ? featured.slice(0, 4) : products.slice(0, 4))
+
+    // New arrivals: sort by date descending
+    const sorted = [...products].sort((a, b) => b.created_at.localeCompare(a.created_at))
+    setNewArrivals(sorted.slice(0, 4))
+
+    // Categories mapping
+    const CAT_INFO: Record<string, { icon: any; img: string }> = {
+      watches: { icon: Watch, img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000' },
+      bags: { icon: Briefcase, img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1000' },
+      perfumes: { icon: Sparkles, img: 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=1000' },
+    }
+
+    const mappedCats = cats.map((c) => {
+      const info = CAT_INFO[c.id] || { icon: Sparkles, img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000' }
+      const count = products.filter((p) => p.category === c.id).length
+      return {
+        ...c,
+        icon: info.icon,
+        img: info.img,
+        count: `${count} Product${count !== 1 ? 's' : ''}`,
+      }
+    })
+    setCategoriesList(mappedCats)
+  }, [])
 
   return (
     <div className="flex flex-col">
@@ -323,11 +357,7 @@ export default function HomePage() {
           </RevealSection>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { name: 'Watches', slug: 'watches', icon: Watch, count: '42 Products', gradient: 'from-blue-600 to-indigo-900', img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000' },
-              { name: 'Bags', slug: 'bags', icon: Briefcase, count: '18 Products', gradient: 'from-purple-600 to-indigo-950', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1000' },
-              { name: 'Perfumes', slug: 'perfumes', icon: Sparkles, count: '12 Products', gradient: 'from-pink-600 to-purple-950', img: 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=1000' },
-            ].map((category, index) => {
+            {categoriesList.map((category, index) => {
               const Icon = category.icon
               return (
                 <RevealSection key={category.slug} delay={index * 150} duration={800}>

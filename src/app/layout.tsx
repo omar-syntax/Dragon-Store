@@ -3,8 +3,8 @@ import { Montserrat, Cinzel } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import Providers from "./providers";
 
-// Modern, clean, geometric sans-serif for body text
 const montserrat = Montserrat({
   variable: "--font-sans",
   subsets: ["latin"],
@@ -12,7 +12,6 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
-// Powerful, timeless, Roman-inspired serif for headings
 const cinzel = Cinzel({
   variable: "--font-heading",
   subsets: ["latin"],
@@ -32,14 +31,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.variable} ${cinzel.variable} antialiased min-h-screen flex flex-col`}
-      >
-        <Navbar />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+      <body className={`${montserrat.variable} ${cinzel.variable} antialiased min-h-screen flex flex-col`}>
+        <Providers>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

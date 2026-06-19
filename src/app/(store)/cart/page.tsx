@@ -1,41 +1,26 @@
+'use client'
+
 import Link from 'next/link'
 import { ArrowLeft, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import CartItem from '@/components/cart/CartItem'
 import { formatPrice } from '@/lib/utils'
-
-// Mock cart data
-const MOCK_CART_ITEMS = [
-  {
-    product: {
-      id: '1',
-      name: 'Dragon Chronograph Silver',
-      slug: 'dragon-chronograph-silver',
-      description: 'A premium stainless steel chronograph watch.',
-      price: 250,
-      images: [],
-      category: 'watches',
-      stock: 10,
-      created_at: new Date().toISOString()
-    },
-    quantity: 1
-  }
-]
+import { useCart } from '@/contexts/CartContext'
 
 export default function CartPage() {
-  const subtotal = MOCK_CART_ITEMS.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-  const shipping = 10
+  const { items, subtotal } = useCart()
+  const shipping = items.length > 0 ? 10 : 0
   const total = subtotal + shipping
 
   return (
     <div className="container py-8 md:py-12">
       <h1 className="text-3xl font-bold tracking-tight mb-8">Shopping Cart</h1>
 
-      {MOCK_CART_ITEMS.length > 0 ? (
+      {items.length > 0 ? (
         <div className="grid gap-12 lg:grid-cols-12">
           {/* Cart Items */}
           <div className="lg:col-span-8 flex flex-col divide-y border-y">
-            {MOCK_CART_ITEMS.map((item) => (
+            {items.map((item) => (
               <CartItem key={item.product.id} item={item} />
             ))}
             <div className="py-6">
